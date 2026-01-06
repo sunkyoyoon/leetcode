@@ -1,22 +1,21 @@
 class Solution:
     def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
         graph = collections.defaultdict(set)
-        for u, v in edges:
-            stack = [u]
-            seen = set()
+        seen = set() 
+        def dfs(u,v):
+            if u == v:
+                return True 
+            if u in seen:
+                return False 
+            seen.add(u)
+            for dst in graph[u]:
+                if dfs(dst, v):
+                    return True 
+            seen.remove(u)
 
-            while stack:
-                src = stack.pop()
-                if src == v:
-                    return [u, v]
-
-                if src in seen:
-                    continue
-                seen.add(src)
-
-                for dst in graph[src]:
-                    if dst not in seen:
-                        stack.append(dst)
-
+        for u,v in edges:
+            if dfs(u,v):
+                return [u,v]
             graph[u].add(v)
             graph[v].add(u)
+        
