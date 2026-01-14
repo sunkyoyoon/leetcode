@@ -1,24 +1,23 @@
 class Solution:
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
-        heap = [] 
-        seen = set() 
-        adj = {} 
-        for t in times:
-            u = t[0]
-            v = t[1]
-            w = t[2]
-            if u not in adj:
-                adj[u] = []
-            adj[u].append((w, v))
+        heap = [(0,k)]
+        graph = collections.defaultdict(list)
+        dist = {i:float("inf") for i in range(1,n+1)}
+        for u,v,w in times:
+            graph[u].append((v,w))
         
-        heappush(heap, (0,k))
-        while heap and len(seen) < n:
-            cost, src = heappop(heap)
-            seen.add(src)
-            if src in adj:
-                for p in adj[src]:
-                    if p[1] not in seen:
-                        heappush(heap, (cost + p[0], p[1]))
-                        
+        while heap:
+            weight, node = heappop(heap)
+            if weight < dist[node]:
+                if dist[node] != float("inf"):
+                    continue
+                dist[node] = weight 
+            elif weight >= dist[node]:
+                continue
+            for v,w in graph[node]:
+                heappush(heap, (w + weight, v))
         
-        return cost if len(seen) == n else -1
+        return max(dist.values()) if max(dist.values()) != float("inf") else -1
+
+# O(nlogn) time
+# O(n) space
