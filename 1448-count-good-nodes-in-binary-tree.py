@@ -11,10 +11,7 @@ class Solution:
             nonlocal ans
             if node == None:
                 return 
-
-            if max_node == None:
-                max_node = node.val
-            elif node.val >= max_node:
+            if node.val >= max_node:
                 max_node = node.val
                 ans += 1
 
