@@ -6,5 +6,6 @@ class Solution:
             if num in hashmap:
                 return [hashmap[num], i]
             hashmap[nums[i]] = i 
-        
+
+
 
